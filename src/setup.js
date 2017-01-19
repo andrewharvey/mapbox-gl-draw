@@ -19,6 +19,7 @@ module.exports = function(ctx) {
       setup.removeLayers();
       ctx.ui.removeButtons();
       ctx.events.removeEventListeners();
+      if (ctx.mapBoxZoomOriginalState) ctx.map.boxZoom.enable();
       ctx.map = null;
       ctx.container = null;
       ctx.store = null;
@@ -36,6 +37,8 @@ module.exports = function(ctx) {
       controlContainer = ctx.ui.addButtons();
 
       if (ctx.options.boxSelect) {
+        // save if the boxZoom is enabled so it can be restored on control removal
+        ctx.mapBoxZoomOriginalState = map.boxZoom.isEnabled();
         map.boxZoom.disable();
         // Need to toggle dragPan on and off or else first
         // dragPan disable attempt in simple_select doesn't work
